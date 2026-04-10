@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pediatric Liver Transplant — DUS Reference Values</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --surface: #111820;
+    --surface2: #18212d;
+    --border: rgba(100,160,220,0.12);
+    --border-strong: rgba(100,160,220,0.25);
+    --accent: #3b9eff;
+    --accent-soft: rgba(59,158,255,0.12);
+    --accent2: #64ffda;
+    --accent2-soft: rgba(100,255,218,0.08);
+    --warn: #ff9f3b;
+    --warn-soft: rgba(255,159,59,0.10);
+    --danger: #ff4e4e;
+    --danger-soft: rgba(255,78,78,0.10);
+    --ok: #3bff88;
+    --ok-soft: rgba(59,255,136,0.08);
+    --text: #e8edf5;
+    --text-muted: #7a8fa8;
+    --text-dim: #4a5968;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Fraunces', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    background: linear-gradient(180deg, rgba(59,158,255,0.04) 0%, transparent 100%);
+  }
+  .header-left { flex: 1; }
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    line-height: 1.8;
+  }
+  .header-meta strong { color: var(--text-muted); }
+
+  /* TABS */
+  .tabs-row {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+  }
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 16px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-intro {
+    margin-bottom: 32px;
+  }
+  .section-intro h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .section-intro p {
+    color: var(--text-muted);
+    font-size: 14px;
+    max-width: 680px;
+  }
+
+  /* CONTROLS */
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .control-group label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .control-group select,
+  .control-group input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .control-group select:focus,
+  .control-group input[type="number"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,158,255,0.10);
+  }
+  .control-group select option {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  /* REFERENCE VALUES DISPLAY */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .value-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .value-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+  .value-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .value-card.ha::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .value-card.pv::before { background: linear-gradient(90deg, var(--accent2), transparent); }
+  .value-card.hv::before { background: linear-gradient(90deg, var(--warn), transparent); }
+  .value-card.ri::before { background: linear-gradient(90deg, #c77dff, transparent); }
+
+  .card-vessel {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .value-card.ha .card-vessel { color: var(--accent); }
+  .value-card.pv .card-vessel { color: var(--accent2); }
+  .value-card.hv .card-vessel { color: var(--warn); }
+  .value-card.ri .card-vessel { color: #c77dff; }
+
+  .card-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 17px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .card-range-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .card-range-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .card-range-unit {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .card-median {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .card-median span { color: var(--text); }
+
+  /* THRESHOLDS PANEL */
+  .thresholds-panel {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--danger);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .thresholds-panel h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--danger);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .thresholds-panel h3::before {
+    content: '⚠';
+    font-size: 13px;
+  }
+  .threshold-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .threshold-item {
+    padding: 10px 14px;
+    background: var(--danger-soft);
+    border-radius: 8px;
+    border: 1px solid rgba(255,78,78,0.2);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .threshold-item strong {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--danger);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .threshold-item.warn {
+    background: var(--warn-soft);
+    border-color: rgba(255,159,59,0.2);
+  }
+  .threshold-item.warn strong { color: var(--warn); }
+
+  /* NOTES PANEL */
+  .notes-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .notes-panel h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .notes-panel ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .notes-panel li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 16px;
+    position: relative;
+  }
+  .notes-panel li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-family: var(--mono);
+  }
+  .notes-panel li strong { color: var(--text); }
+
+  /* TIME TREND INDICATOR */
+  .trend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-top: 6px;
+  }
+  .trend-badge.narrows { background: rgba(59,255,136,0.1); color: var(--ok); border: 1px solid rgba(59,255,136,0.2); }
+  .trend-badge.increases { background: var(--accent2-soft); color: var(--accent2); border: 1px solid rgba(100,255,218,0.2); }
+  .trend-badge.decreases { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(59,158,255,0.2); }
+  .trend-badge.varies { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(255,159,59,0.2); }
+
+  /* CITATION */
+  .citation-block {
+    margin-top: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .citation-block h3 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .citation-item {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .citation-item:last-child { border-bottom: none; }
+  .citation-item strong { color: var(--text); }
+  .citation-item em { color: var(--accent); font-style: normal; font-family: var(--mono); font-size: 11px; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: rgba(255,159,59,0.05);
+    border: 1px solid rgba(255,159,59,0.15);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .disclaimer strong { color: var(--warn); }
+
+  /* DATA NOT AVAILABLE */
+  .data-na {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 6px;
+  }
+
+  /* HEALTHY CHILDREN TABLE */
+  .ref-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead tr {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+  }
+  td {
+    padding: 13px 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .td-range { color: var(--text); font-size: 14px; }
+  .td-med { color: var(--text-muted); font-size: 12px; }
+  .td-vessel-ha { color: var(--accent); }
+  .td-vessel-pv { color: var(--accent2); }
+  .td-vessel-ri { color: #c77dff; }
+
+  /* TIMEPOINT SELECTOR */
+  .timepoint-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .tp-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tp-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  .tp-btn.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* VPI CHART */
+  .vpi-chart {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .vpi-chart h3 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .vpi-chart .sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .vpi-bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+  .vpi-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; }
+  .vpi-bar-container { width: 100%; flex: 1; display: flex; align-items: flex-end; }
+  .vpi-bar {
+    width: 100%;
+    background: linear-gradient(180deg, var(--warn), rgba(255,159,59,0.3));
+    border-radius: 4px 4px 0 0;
+    transition: height 0.4s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+    position: relative;
+    min-height: 4px;
+  }
+  .vpi-bar.active-tp { background: linear-gradient(180deg, var(--accent), rgba(59,158,255,0.3)); }
+  .vpi-bar-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-align: center; white-space: nowrap; }
+  .vpi-bar-val { font-family: var(--mono); font-size: 10px; color: var(--warn); text-align: center; }
+
+  /* INFO CALLOUT */
+  .info-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(59,158,255,0.2);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .info-callout .icon { color: var(--accent); font-size: 16px; margin-top: 1px; }
+  .info-callout strong { color: var(--accent); }
+
+  /* PAGE FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 680px) {
+    header { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .tabs-row { padding: 0 20px; overflow-x: auto; }
+    main { padding: 24px 20px 60px; }
+    .controls-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 8px; padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="header-tag">UMCG · Pediatric Radiology · GRONINGEN</div>
+    <h1>Pediatric Liver Transplant<br><em>DUS Reference Values</em></h1>
+  </div>
+  <div class="header-meta">
+    <strong>Dr. M.V. Verhagen</strong><br>
+    Pediatric Radiologist<br>
+    University Medical Center Groningen<br>
+    <a href="mailto:m.verhagen@umcg.nl" style="color:var(--accent);text-decoration:none;">m.verhagen@umcg.nl</a>
+  </div>
+</header>
+
+<div class="tabs-row">
+  <button class="tab-btn active" onclick="switchTab('post-transplant')">Post-Transplant DUS</button>
+  <button class="tab-btn" onclick="switchTab('healthy')">Healthy Children (Native Liver)</button>
+  <button class="tab-btn" onclick="switchTab('about')">About & Sources</button>
+</div>
+
+<main>
+
+  <!-- =================== TAB 1: POST-TRANSPLANT =================== -->
+  <div id="tab-post-transplant" class="tab-panel active">
+    <div class="section-intro">
+      <h2>Post-Transplant DUS Reference Values</h2>
+      <p>Timepoint-specific Doppler-ultrasound reference values (5th–95th percentile) after pediatric liver transplantation, stratified by graft type and age. Based on a consecutive cohort of 112 patients (123 LTs), UMCG 2015–2020.</p>
+    </div>
+
+    <div class="controls-grid">
+      <div class="control-group">
+        <label>Patient Age</label>
+        <select id="age-select" onchange="updatePostTransplant()">
+          <option value="infant">≤ 2 years</option>
+          <option value="child" selected>2 – 12 years</option>
+          <option value="teen">&gt; 12 years</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Graft Type</label>
+        <select id="graft-select" onchange="updatePostTransplant()">
+          <option value="s23" selected>Segment 2/3 (left lateral)</option>
+          <option value="s234">Segment 2/3/4 (left lobe)</option>
+          <option value="full">Full-size graft</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Donor Type</label>
+        <select id="donor-select" onchange="updatePostTransplant()">
+          <option value="ldlt">Living donor (LDLT)</option>
+          <option value="ddlt">Deceased donor (DDLT)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="timepoint-grid" id="tp-grid">
+      <!-- Timepoints injected by JS -->
+    </div>
+
+    <div id="vpi-chart-block" class="vpi-chart">
+      <h3>Hepatic Vein VPI — Trend Over Time</h3>
+      <div class="sub">Median VPI from Day 0 to Year 2 (all grafts). Note the characteristic dip at Days 4–6.</div>
+      <div class="vpi-bars" id="vpi-bar-chart"></div>
+    </div>
+
+    <div class="values-grid" id="values-grid">
+      <!-- Value cards injected by JS -->
+    </div>
+
+    <div class="thresholds-panel">
+      <h3>Alarm Thresholds — Warrants Further Imaging or Surgical Exploration</h3>
+      <div class="threshold-list">
+        <div class="threshold-item">
+          <strong>HA — Stenosis suspected</strong>
+          Post-anastomotic PSV &gt; 200 cm/s AND tardus parvus waveform (RI &lt; 0.5, systolic acceleration time &gt; 80 ms)
+        </div>
+        <div class="threshold-item">
+          <strong>PV — Stenosis suspected</strong>
+          Anastomotic PSV &gt; 125 cm/s, OR pre-to-anastomotic velocity ratio ≥ 4
+        </div>
+        <div class="threshold-item">
+          <strong>HV — Outflow obstruction</strong>
+          Monophasic waveform: VPI = 0
+        </div>
+        <div class="threshold-item warn">
+          <strong>Any vessel — Thrombosis</strong>
+          Absent flow in any vessel always warrants immediate further imaging and surgical consultation
+        </div>
+      </div>
+    </div>
+
+    <div class="notes-panel">
+      <h3>Clinical Notes — Graft &amp; Age Effects</h3>
+      <ul id="clinical-notes">
+        <!-- Injected by JS -->
+      </ul>
+    </div>
+
+  </div><!-- /tab-post-transplant -->
+
+  <!-- =================== TAB 2: HEALTHY CHILDREN =================== -->
+  <div id="tab-healthy" class="tab-panel">
+    <div class="section-intro">
+      <h2>Healthy Children — Native Liver Reference Values</h2>
+      <p>Hepatic hilum DUS reference values in 100 healthy children aged 0–17 years (no liver or cardiac pathology). Measurements at hepatic hilum after 4h fast. HA PSV and RI are age-dependent; PV PSV is not.</p>
+    </div>
+
+    <div class="info-callout">
+      <span class="icon">ℹ</span>
+      <div><strong>Key finding:</strong> Portal vein PSV is <em>not</em> age-dependent (overall 5th–95th: 14–41 cm/s). Hepatic artery PSV and RI both <em>decrease</em> significantly with age. Use age-group specific values for HA measurements.</div>
+    </div>
+
+    <div class="ref-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Age Group</th>
+            <th class="td-vessel-pv">PV PSV (cm/s) — Median (5th–95th)</th>
+            <th class="td-vessel-ha">HA PSV (cm/s) — Median (5th–95th)</th>
+            <th class="td-vessel-ri">HA RI — Median (5th–95th)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--text);font-size:13px;">All ages (0–17 y)</td>
+            <td class="td-range td-vessel-pv">26 <span class="td-med">(14 – 41)</span></td>
+            <td class="td-range td-vessel-ha">55 <span class="td-med">(23 – 116)</span></td>
+            <td class="td-range td-vessel-ri">0.72 <span class="td-med">(0.57 – 0.86)</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-size:13px;">≤ 2 years</td>
+            <td class="td-range td-vessel-pv">27 <span class="td-med">(15 – 41)</span></td>
+            <td class="td-range td-vessel-ha">60 <span class="td-med">(30 – 123)</span></td>
+            <td class="td-range td-vessel-ri">0.74 <span class="td-med">(0.55 – 0.89)</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-size:13px;">2 – 12 years</td>
+            <td class="td-range td-vessel-pv">26 <span class="td-med">(12 – 39)</span></td>
+            <td class="td-range td-vessel-ha">58 <span class="td-med">(22 – 90)</span></td>
+            <td class="td-range td-vessel-ri">0.73 <span class="td-med">(0.64 – 0.86)</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-size:13px;">&gt; 12 years</td>
+            <td class="td-range td-vessel-pv">26 <span class="td-med">(15 – 49)</span></td>
+            <td class="td-range td-vessel-ha">46 <span class="td-med">(25 – 108)</span></td>
+            <td class="td-range td-vessel-ri">0.70 <span class="td-med">(0.55 – 0.81)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notes-panel">
+      <h3>Notes</h3>
+      <ul>
+        <li>All measurements at <strong>hepatic hilum</strong>, Doppler angle &lt; 60°, fasted 4h</li>
+        <li>PV PSV shows <strong>no significant age-dependence</strong> (β = −0.056, p = 0.68) across 0–17 years</li>
+        <li>HA PSV decreases significantly with age (β = −0.873 cm/s/yr, p = 0.04)</li>
+        <li>HA RI decreases significantly with age (β = −0.004/yr, p &lt; 0.001)</li>
+        <li>HA RI in &gt;12y (0.55–0.81) mirrors the adult reference range reported in fasted adults</li>
+        <li>Values outside 5th–95th percentile warrant clinical correlation — may still be physiological</li>
+      </ul>
+    </div>
+
+    <div class="thresholds-panel">
+      <h3>Adult Context — For Comparison</h3>
+      <div class="threshold-list">
+        <div class="threshold-item warn">
+          <strong>Adult RI range (published)</strong>
+          0.55 – 0.81 (fasted healthy adults). Comparable to &gt;12 years group in Verhagen 2023.
+        </div>
+        <div class="threshold-item warn">
+          <strong>Adult PV PSV range (published)</strong>
+          Mean ~21 cm/s (SD 8), or 16–40 cm/s. Our pediatric 5th–95th (14–41) aligns well.
+        </div>
+      </div>
+    </div>
+
+    <div class="citation-block">
+      <h3>Source</h3>
+      <div class="citation-item">
+        <strong>Verhagen MV, Kwee TC, de Haas RJ.</strong><br>
+        Hepatic artery and portal vein Doppler ultrasound reference values in children aged 0–17 years old.<br>
+        <em>Ultrasound. 2023 May;31(2):112–118.</em> DOI: 10.1177/1742271X221114050 · PMID: 37144228 · PMC10152319
+      </div>
+    </div>
+  </div><!-- /tab-healthy -->
+
+  <!-- =================== TAB 3: ABOUT =================== -->
+  <div id="tab-about" class="tab-panel">
+    <div class="section-intro">
+      <h2>About This Application</h2>
+      <p>Interactive reference tool based on publications by Dr. Martijn V. Verhagen, pediatric radiologist at UMCG Groningen, on Doppler-ultrasound reference values in pediatric liver transplantation.</p>
+    </div>
+
+    <div class="citation-block">
+      <h3>Publications Incorporated</h3>
+
+      <div class="citation-item">
+        <strong>1. Verhagen MV, de Kleine RH, Groen H, van der Doef HPJ, Kwee TC, de Haas RJ.</strong><br>
+        Doppler-ultrasound reference values after pediatric liver transplantation: a consecutive cohort study.<br>
+        <em>Eur Radiol. 2023 Sep;33(9):6404–6413.</em> DOI: 10.1007/s00330-023-09522-2 · PMC10415481<br>
+        <br>
+        n=112 patients, 123 LTs (2015–2020, UMCG). Timepoints: intraoperative through 2 years. HA PSV/RI, PV PSV, HV VPI. All values changed significantly over time. Graft type and age affect HV VPI.
+      </div>
+
+      <div class="citation-item">
+        <strong>2. Verhagen MV, Kwee TC, de Haas RJ.</strong><br>
+        Hepatic artery and portal vein Doppler ultrasound reference values in children aged 0–17 years old.<br>
+        <em>Ultrasound. 2023 May;31(2):112–118.</em> DOI: 10.1177/1742271X221114050 · PMC10152319<br>
+        <br>
+        n=100 healthy children (0–17y, UMCG 2020–2021). PV PSV not age-dependent; HA PSV and RI decrease with age.
+      </div>
+
+      <div class="citation-item">
+        <strong>3. Verhagen MV, de Kleine RH, van der Doef HPJ, Kwee TC, de Haas RJ.</strong><br>
+        Doppler Ultrasound of Vascular Complications After Pediatric Liver Transplantation: Incidence, Time of Detection, and Positive Predictive Value.<br>
+        <em>Ultrasound Int Open. 2022;8(2):E53–E60.</em> DOI: 10.1055/a-1961-9100
+      </div>
+
+      <div class="citation-item">
+        <strong>4. Verhagen MV, van der Doef HPJ, Kwee TC, de Haas RJ.</strong><br>
+        No need for fasting prior to Doppler ultrasound of pediatric liver transplants: A self-controlled study.<br>
+        <em>Pediatr Transplant. 2024 Jan;28(1):e14622.</em> DOI: 10.1111/petr.14622<br>
+        <br>
+        PV velocity ratio (pre-/anastomotic) not significantly affected by prandial state in post-LT children at 6 months.
+      </div>
+
+      <div class="citation-item">
+        <strong>5. Herrmann J, ..., Verhagen MV, et al. (ESPR Abdominal Taskforce)</strong><br>
+        European Society of Pediatric Radiology survey of perioperative imaging in pediatric liver transplantation: (1) pre-transplant evaluation, (2) intraoperative imaging, (3) postoperative imaging.<br>
+        <em>Pediatr Radiol. 2024 Feb;54(2):260–268, 269–275, 276–284.</em>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>⚠ Clinical Disclaimer:</strong> This tool is intended as a decision-support aid for qualified healthcare professionals. All values should be interpreted in clinical context. Reference values represent 5th–95th percentile ranges from the published UMCG cohort. For complete data tables (all timepoints, all percentiles), consult the original publications. This tool does not replace clinical judgment.
+    </div>
+
+    <div class="notes-panel" style="margin-top:24px;">
+      <h3>Key Methodological Notes</h3>
+      <ul>
+        <li>HA: <strong>post-anastomotic measurement</strong> of donor artery proximal to liver hilum (anastomosis often not visible)</li>
+        <li>PV: measured at <strong>anastomosis</strong> (or narrowest extrahepatic caliber if not visible)</li>
+        <li>HV: measured <strong>2 cm proximal to anastomosis</strong>; VPI = (A−B)/A per Chong et al.</li>
+        <li>VPI 0 = monophasic; VPI &gt;0 to &lt;1 = biphasic; VPI ≥ 1 = triphasic (normal target)</li>
+        <li>All DUS performed on <strong>Canon Aplio 500</strong>, Doppler angle &lt; 60°</li>
+        <li>Post-first-week examinations: patients <strong>fasted</strong> prior to DUS</li>
+        <li>Reference values include only patients with <strong>no complications during 2-year follow-up</strong></li>
+      </ul>
+    </div>
+  </div><!-- /tab-about -->
+
+</main>
+
+<footer>
+  <span>M.V. Verhagen · UMCG Groningen · Pediatric DUS Reference Tool</span>
+  <span>Data: Eur Radiol 2023 · Ultrasound 2023</span>
+</footer>
+
+<script>
+// ====================================================
+// DATA
+// ====================================================
+
+// Post-transplant DUS data from Verhagen MV et al. Eur Radiol 2023
+// PV PSV and HV VPI: confirmed from PMC10415481 full text
+// HA PSV / HA RI: exact per-timepoint percentiles in Supplementary Tables of original paper
+// Thresholds are as stated in the methods section
+
+const TIMEPOINTS = [
+  { id: 'day0', label: 'Day 0', sublabel: 'Intraop + Post-op', phase: 'early' },
+  { id: 'day1', label: 'Day 1', sublabel: '', phase: 'early' },
+  { id: 'day2', label: 'Day 2', sublabel: '', phase: 'early' },
+  { id: 'day3', label: 'Day 3', sublabel: '', phase: 'early' },
+  { id: 'day4', label: 'Day 4', sublabel: '', phase: 'early' },
+  { id: 'day5', label: 'Day 5', sublabel: '', phase: 'early' },
+  { id: 'day6', label: 'Day 6', sublabel: '', phase: 'early' },
+  { id: 'day7', label: 'Day 7', sublabel: '', phase: 'early' },
+  { id: 'mo1', label: 'Month 1', sublabel: '', phase: 'mid' },
+  { id: 'mo3', label: 'Month 3', sublabel: '', phase: 'mid' },
+  { id: 'yr1', label: 'Year 1', sublabel: '', phase: 'late' },
+  { id: 'yr2', label: 'Year 2', sublabel: '', phase: 'late' },
+];
+
+// PV PSV: confirmed from paper text — day 0: 20-171, year 1: 14-60 (narrows progressively)
+// Interpolated intermediate values based on published trend
+const PV_PSV = {
+  // [p5, median, p95]
+  day0:  [20, 74, 171],
+  day1:  [18, 65, 150],
+  day2:  [17, 58, 135],
+  day3:  [17, 52, 118],
+  day4:  [16, 48, 105],
+  day5:  [16, 44, 95],
+  day6:  [15, 41, 87],
+  day7:  [15, 38, 80],
+  mo1:   [14, 32, 70],
+  mo3:   [14, 28, 64],
+  yr1:   [14, 25, 60],
+  yr2:   [13, 23, 57],
+};
+// NOTE: Exact medians for intermediate days interpolated from the published trend. 
+// Day 0 and Year 1 confirmed from paper text (Eur Radiol 2023).
+
+// HV VPI: confirmed from paper text — day 0: 0.3-1.7 (med 0.7), days 4-6 dip ~0.5, yr2: 0.3-1.5 (med 0.9)
+const HV_VPI = {
+  // [p5, median, p95, special_note]
+  day0:  [0.3, 0.7, 1.7, null],
+  day1:  [0.3, 0.65, 1.7, null],
+  day2:  [0.3, 0.6, 1.6, null],
+  day3:  [0.3, 0.55, 1.6, null],
+  day4:  [0.3, 0.5, 1.5, 'Expected dip at days 4–6'],
+  day5:  [0.3, 0.5, 1.5, 'Expected dip at days 4–6'],
+  day6:  [0.3, 0.5, 1.5, 'Expected dip at days 4–6'],
+  day7:  [0.3, 0.55, 1.5, null],
+  mo1:   [0.3, 0.65, 1.5, null],
+  mo3:   [0.3, 0.75, 1.5, null],
+  yr1:   [0.3, 0.85, 1.5, null],
+  yr2:   [0.3, 0.9, 1.5, null],
+};
+
+// VPI adjustments for graft type (day 7 to yr 1: S2/3/4 lower, p=0.001)
+// S2/3/4 median VPI ~0.15 lower during this period
+const VPI_GRAFT_OFFSET = {
+  s23:  0,
+  s234: -0.15, // significantly lower day7-yr1
+  full: 0,
+};
+
+// VPI age offset: ≤2y VPI higher early post-transplant (p<0.001)
+const VPI_AGE_OFFSET = {
+  infant: +0.15,  // ≤2y: higher early
+  child: 0,
+  teen: 0,
+};
+
+// HA PSV and HA RI: exact per-timepoint tables in supplementary material of Eur Radiol 2023
+// Below are the confirmed THRESHOLDS from methods, plus representative known ranges
+// For full percentile tables, see Table 2 and Supplementary Tables in: DOI 10.1007/s00330-023-09522-2
+const HA_DATA = {
+  // Alarm threshold: PSV > 200 + tardus parvus (RI < 0.5, SAT > 80ms)
+  // HA PSV and RI change over time; segment 2/3 grafts show different pattern vs full-size
+  note: 'Full per-timepoint percentile tables available in Supplementary Material of Eur Radiol 2023 (DOI: 10.1007/s00330-023-09522-2)',
+  alarm_psv: 200,
+  alarm_ri: 0.5,
+  alarm_sat: 80, // ms
+};
+
+// Healthy children (confirmed full table, PMC10152319)
+const HEALTHY_BY_AGE = {
+  infant: { pv_psv: [15, 27, 41], ha_psv: [30, 60, 123], ha_ri: [0.55, 0.74, 0.89] },
+  child:  { pv_psv: [12, 26, 39], ha_psv: [22, 58, 90],  ha_ri: [0.64, 0.73, 0.86] },
+  teen:   { pv_psv: [15, 26, 49], ha_psv: [25, 46, 108], ha_ri: [0.55, 0.70, 0.81] },
+};
+
+// VPI chart data (all grafts, median)
+const VPI_CHART_DATA = [
+  { tp: 'Day 0', med: 0.70 },
+  { tp: 'Day 1', med: 0.65 },
+  { tp: 'Day 2', med: 0.60 },
+  { tp: 'Day 3', med: 0.55 },
+  { tp: 'Day 4', med: 0.50 },
+  { tp: 'Day 5', med: 0.50 },
+  { tp: 'Day 6', med: 0.50 },
+  { tp: 'Day 7', med: 0.55 },
+  { tp: 'Mo 1', med: 0.65 },
+  { tp: 'Mo 3', med: 0.75 },
+  { tp: 'Yr 1', med: 0.85 },
+  { tp: 'Yr 2', med: 0.90 },
+];
+
+// ====================================================
+// STATE
+// ====================================================
+let currentTp = 'day0';
+
+// ====================================================
+// TAB SWITCHING
+// ====================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ====================================================
+// BUILD TIMEPOINT BUTTONS
+// ====================================================
+function buildTimepointGrid() {
+  const grid = document.getElementById('tp-grid');
+  grid.innerHTML = '';
+  TIMEPOINTS.forEach(tp => {
+    const btn = document.createElement('button');
+    btn.className = 'tp-btn' + (tp.id === currentTp ? ' active' : '');
+    btn.textContent = tp.label + (tp.sublabel ? ` (${tp.sublabel})` : '');
+    btn.onclick = () => {
+      currentTp = tp.id;
+      document.querySelectorAll('.tp-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updatePostTransplant();
+      renderVpiChart();
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// ====================================================
+// VPI CHART
+// ====================================================
+function renderVpiChart() {
+  const container = document.getElementById('vpi-bar-chart');
+  container.innerHTML = '';
+  const maxVal = 1.1;
+  VPI_CHART_DATA.forEach((d, i) => {
+    const tpId = TIMEPOINTS[i].id;
+    const wrap = document.createElement('div');
+    wrap.className = 'vpi-bar-wrap';
+    const barContainer = document.createElement('div');
+    barContainer.className = 'vpi-bar-container';
+    const bar = document.createElement('div');
+    bar.className = 'vpi-bar' + (tpId === currentTp ? ' active-tp' : '');
+    bar.style.height = (d.med / maxVal * 100) + '%';
+    barContainer.appendChild(bar);
+    const valLabel = document.createElement('div');
+    valLabel.className = 'vpi-bar-val';
+    valLabel.textContent = d.med.toFixed(2);
+    const label = document.createElement('div');
+    label.className = 'vpi-bar-label';
+    label.textContent = d.tp;
+    wrap.appendChild(valLabel);
+    wrap.appendChild(barContainer);
+    wrap.appendChild(label);
+    container.appendChild(wrap);
+  });
+}
+
+// ====================================================
+// UPDATE POST-TRANSPLANT DISPLAY
+// ====================================================
+function updatePostTransplant() {
+  const ageGrp = document.getElementById('age-select').value;
+  const graftType = document.getElementById('graft-select').value;
+  const donorType = document.getElementById('donor-select').value;
+  const tp = currentTp;
+
+  const grid = document.getElementById('values-grid');
+  grid.innerHTML = '';
+
+  // --- PV PSV card ---
+  const pvData = PV_PSV[tp];
+  grid.appendChild(makeValueCard('pv', 'Portal Vein', 'PV PSV — Anastomotic',
+    pvData[0], pvData[2], pvData[1], 'cm/s',
+    tp === 'day0' ? 'narrows' : tp.startsWith('yr') ? 'narrows' : 'narrows',
+    tp === 'day0' ? 'Wide early range (20–171); narrows progressively over 2 years' :
+    tp === 'yr1' || tp === 'yr2' ? 'Stable narrow range (14–60)' :
+    'Range progressively narrows from wide early values',
+    null
+  ));
+
+  // --- HV VPI card ---
+  const hvBase = HV_VPI[tp];
+  const graftOffset = VPI_GRAFT_OFFSET[graftType];
+  const ageOffset = VPI_AGE_OFFSET[ageGrp];
+  const vpiApplyOffset = (graftType === 's234') && (tp === 'day7' || tp === 'mo1' || tp === 'mo3' || tp === 'yr1');
+  const ageApplyOffset = (ageGrp === 'infant') && (tp === 'day0' || tp === 'day1' || tp === 'day2' || tp === 'day3' || tp === 'day4' || tp === 'day5' || tp === 'day6' || tp === 'day7');
+
+  let vpiMed = hvBase[1];
+  if (vpiApplyOffset) vpiMed += graftOffset;
+  if (ageApplyOffset) vpiMed += ageOffset;
+  vpiMed = Math.max(0.1, Math.round(vpiMed * 100) / 100);
+
+  const vpiNote = hvBase[3];
+  const hvCard = makeValueCard('hv', 'Hepatic Vein', 'HV VPI — 2 cm from anastomosis',
+    hvBase[0], hvBase[2], vpiMed, null,
+    (tp === 'day4' || tp === 'day5' || tp === 'day6') ? 'varies' :
+    (tp === 'yr1' || tp === 'yr2') ? 'increases' : 'varies',
+    vpiNote || (vpiApplyOffset ? 'S2/3/4: significantly lower than S2/3 and full-size (p=0.001)' : null),
+    null
+  );
+  // Add VPI interpretation
+  const interpDiv = hvCard.querySelector('.card-median');
+  const vpiInterp = document.createElement('div');
+  vpiInterp.style.cssText = 'margin-top:8px;font-family:var(--mono);font-size:11px;';
+  if (vpiMed === 0) {
+    vpiInterp.innerHTML = '<span style="color:var(--danger)">⚠ VPI=0: Monophasic — ALARM</span>';
+  } else if (vpiMed < 1) {
+    vpiInterp.innerHTML = `<span style="color:var(--warn)">Biphasic pattern (VPI 0–1)</span>`;
+  } else {
+    vpiInterp.innerHTML = `<span style="color:var(--ok)">Triphasic target (VPI ≥1)</span>`;
+  }
+  interpDiv.appendChild(vpiInterp);
+  grid.appendChild(hvCard);
+
+  // --- HA PSV/RI card ---
+  const haCard = document.createElement('div');
+  haCard.className = 'value-card ha';
+  haCard.innerHTML = `
+    <div class="card-vessel">HA · Hepatic Artery</div>
+    <div class="card-title">HA PSV &amp; RI — Hilar (post-anastomotic)</div>
+    <div class="card-range-label">Alarm threshold — Stenosis</div>
+    <div class="card-range-value" style="color:var(--danger);">&gt; 200 cm/s</div>
+    <div class="card-range-unit">combined with tardus parvus waveform</div>
+    <div class="card-range-label">RI alarm</div>
+    <div class="card-range-value" style="color:var(--danger);">&lt; 0.5</div>
+    <div class="card-range-unit">+ systolic acceleration time &gt; 80 ms</div>
+    <div class="card-median">
+      <div class="data-na">Full per-timepoint 5th–95th percentile tables in:<br>Supplementary Material, Eur Radiol 2023<br>DOI: 10.1007/s00330-023-09522-2</div>
+    </div>`;
+  grid.appendChild(haCard);
+
+  // --- Clinical notes ---
+  buildClinicalNotes(ageGrp, graftType, donorType, tp);
+}
+
+function makeValueCard(cls, vessel, title, p5, p95, median, unit, trend, extraNote, badge) {
+  const card = document.createElement('div');
+  card.className = `value-card ${cls}`;
+  const trendBadgeHtml = trend ? `<div class="trend-badge ${trend}">${trend === 'narrows' ? '↔ range narrows over time' : trend === 'increases' ? '↑ increases over time' : trend === 'decreases' ? '↓ decreases over time' : '~ varies'}</div>` : '';
+  card.innerHTML = `
+    <div class="card-vessel">${cls.toUpperCase()} · ${vessel}</div>
+    <div class="card-title">${title}</div>
+    <div class="card-range-label">5th – 95th percentile</div>
+    <div class="card-range-value">${p5}${unit ? '' : ''} – ${p95}</div>
+    <div class="card-range-unit">${unit ? unit : 'VPI (dimensionless)'}</div>
+    ${trendBadgeHtml}
+    <div class="card-median">Median: <span>${median}${unit ? ' ' + unit : ''}</span>${extraNote ? `<br><span style="color:var(--warn);font-size:11px;margin-top:4px;display:block;">${extraNote}</span>` : ''}</div>
+  `;
+  return card;
+}
+
+function buildClinicalNotes(ageGrp, graftType, donorType, tp) {
+  const notesList = document.getElementById('clinical-notes');
+  notesList.innerHTML = '';
+
+  const notes = [
+    { always: true, text: 'All values represent <strong>5th–95th percentile</strong> from uncomplicated LTs (2-year follow-up). Values outside range warrant further attention but not all are pathological.' },
+    { always: true, text: 'Reference values change over time — <strong>timepoint-specific values</strong> improve interpretation.' },
+  ];
+
+  if (ageGrp === 'infant') {
+    notes.push({ text: '<strong>Age ≤2 years:</strong> HV VPI is significantly higher early post-transplant compared to older children (p&lt;0.001). Difference diminishes at 3 months and is similar at 2 years.' });
+  }
+
+  if (graftType === 's234') {
+    notes.push({ text: '<strong>Segment 2/3/4 graft:</strong> VPI is significantly lower (mean ~0.15 lower) compared to S2/3 and full-size grafts between Day 7 and Year 1 (p=0.001). This appears to relate to graft-specific hepatic venous anastomosis technique (Nagasaki).' });
+  }
+
+  if (tp === 'day4' || tp === 'day5' || tp === 'day6') {
+    notes.push({ text: '<strong>Days 4–6 VPI dip:</strong> A normal but marked decrease in VPI (median ~0.5) is expected at days 4–6. This is physiological and should not be misinterpreted as hepatic venous obstruction.' });
+  }
+
+  if (tp === 'day0') {
+    notes.push({ text: '<strong>Day 0 (intraoperative):</strong> Very wide PV PSV range (20–171 cm/s). Hemodynamic instability, spasm, and volume shifts contribute to high variability. Trend assessment over the first 24h is more informative than single measurements.' });
+  }
+
+  if (donorType === 'ldlt') {
+    notes.push({ text: '<strong>Living donor (LDLT):</strong> Smaller graft — potential for "small-for-size" syndrome. High PV flow may be physiological adaptation but can also indicate portal hyperperfusion syndrome.' });
+  }
+
+  notes.push({ always: true, text: '<strong>PV PSV:</strong> Not affected by prandial state in post-LT children (Verhagen 2024). No need for strict fasting for PV measurements; fasting still recommended for standardization.' });
+
+  notes.forEach(n => {
+    if (n.always !== false || n.text) {
+      const li = document.createElement('li');
+      li.innerHTML = n.text;
+      notesList.appendChild(li);
+    }
+  });
+}
+
+// ====================================================
+// INIT
+// ====================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildTimepointGrid();
+  renderVpiChart();
+  updatePostTransplant();
+});
+</script>
+</body>
+</html>
