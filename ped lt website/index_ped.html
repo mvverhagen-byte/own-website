@@ -545,6 +545,11 @@
   .vpi-bar.active-tp { background: linear-gradient(180deg, var(--accent), rgba(59,158,255,0.3)); }
   .vpi-bar-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-align: center; white-space: nowrap; }
   .vpi-bar-val { font-family: var(--mono); font-size: 10px; color: var(--warn); text-align: center; }
+  .vpi-bar.pv-bar { background: linear-gradient(180deg, rgba(100,255,218,0.5), rgba(100,255,218,0.15)); }
+  .vpi-bar.pv-bar.active-tp { background: linear-gradient(180deg, var(--accent2), rgba(100,255,218,0.3)); }
+  .vpi-bar-val.pv-val { color: var(--accent2); }
+  .value-card.clickable { cursor: pointer; }
+  .value-card.chart-active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
   /* INFO CALLOUT */
   .info-callout {
@@ -647,8 +652,8 @@
     </div>
 
     <div id="vpi-chart-block" class="vpi-chart">
-      <h3>Hepatic Vein VPI — Trend Over Time</h3>
-      <div class="sub">Median VPI from Day 0 to Year 2 (all grafts). Note the characteristic dip at Days 4–6.</div>
+      <h3 id="trend-chart-title">Hepatic Vein VPI — Trend Over Time</h3>
+      <div class="sub" id="trend-chart-sub">Median VPI from Day 0 to Year 2 (all grafts). Note the characteristic dip at Days 4–6.</div>
       <div class="vpi-bars" id="vpi-bar-chart"></div>
     </div>
 
@@ -962,6 +967,7 @@ const VPI_CHART_DATA = [
 // STATE
 // ====================================================
 let currentTp = 'day0';
+let currentChart = 'vpi';
 
 // ====================================================
 // TAB SWITCHING
@@ -988,32 +994,49 @@ function buildTimepointGrid() {
       document.querySelectorAll('.tp-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       updatePostTransplant();
-      renderVpiChart();
+      renderTrendChart();
     };
     grid.appendChild(btn);
   });
 }
 
 // ====================================================
-// VPI CHART
+// TREND CHART (PV PSV / VPI)
 // ====================================================
-function renderVpiChart() {
+function renderTrendChart() {
   const container = document.getElementById('vpi-bar-chart');
+  const heading = document.getElementById('trend-chart-title');
+  const sub = document.getElementById('trend-chart-sub');
   container.innerHTML = '';
-  const maxVal = 1.1;
-  VPI_CHART_DATA.forEach((d, i) => {
+
+  let data, maxVal, isPv;
+  if (currentChart === 'pv') {
+    heading.textContent = 'Portal Vein PSV — Trend Over Time';
+    sub.textContent = 'Median PV PSV (cm/s) from Day 0 to Year 2. Wide early range narrows progressively as hemodynamics stabilize.';
+    maxVal = 90;
+    isPv = true;
+    data = TIMEPOINTS.map(tp => ({ tp: tp.label.replace('Month', 'Mo').replace('Year', 'Yr'), med: PV_PSV[tp.id][1] }));
+  } else {
+    heading.textContent = 'Hepatic Vein VPI — Trend Over Time';
+    sub.textContent = 'Median VPI from Day 0 to Year 2 (all grafts). Note the characteristic dip at Days 4–6.';
+    maxVal = 1.1;
+    isPv = false;
+    data = VPI_CHART_DATA;
+  }
+
+  data.forEach((d, i) => {
     const tpId = TIMEPOINTS[i].id;
     const wrap = document.createElement('div');
     wrap.className = 'vpi-bar-wrap';
     const barContainer = document.createElement('div');
     barContainer.className = 'vpi-bar-container';
     const bar = document.createElement('div');
-    bar.className = 'vpi-bar' + (tpId === currentTp ? ' active-tp' : '');
+    bar.className = 'vpi-bar' + (tpId === currentTp ? ' active-tp' : '') + (isPv ? ' pv-bar' : '');
     bar.style.height = (d.med / maxVal * 100) + '%';
     barContainer.appendChild(bar);
     const valLabel = document.createElement('div');
-    valLabel.className = 'vpi-bar-val';
-    valLabel.textContent = d.med.toFixed(2);
+    valLabel.className = 'vpi-bar-val' + (isPv ? ' pv-val' : '');
+    valLabel.textContent = isPv ? Math.round(d.med) : d.med.toFixed(2);
     const label = document.createElement('div');
     label.className = 'vpi-bar-label';
     label.textContent = d.tp;
@@ -1022,6 +1045,14 @@ function renderVpiChart() {
     wrap.appendChild(label);
     container.appendChild(wrap);
   });
+
+  updateCardSelection();
+}
+
+function updateCardSelection() {
+  document.querySelectorAll('.value-card.clickable').forEach(c => c.classList.remove('chart-active'));
+  const active = document.querySelector('.value-card.' + (currentChart === 'pv' ? 'pv' : 'hv'));
+  if (active) active.classList.add('chart-active');
 }
 
 // ====================================================
@@ -1038,14 +1069,17 @@ function updatePostTransplant() {
 
   // --- PV PSV card ---
   const pvData = PV_PSV[tp];
-  grid.appendChild(makeValueCard('pv', 'Portal Vein', 'PV PSV — Anastomotic',
+  const pvCard = makeValueCard('pv', 'Portal Vein', 'PV PSV — Anastomotic',
     pvData[0], pvData[2], pvData[1], 'cm/s',
     tp === 'day0' ? 'narrows' : tp.startsWith('yr') ? 'narrows' : 'narrows',
     tp === 'day0' ? 'Wide early range (20–171); narrows progressively over 2 years' :
     tp === 'yr1' || tp === 'yr2' ? 'Stable narrow range (14–60)' :
     'Range progressively narrows from wide early values',
     null
-  ));
+  );
+  pvCard.classList.add('clickable');
+  pvCard.onclick = () => { currentChart = 'pv'; renderTrendChart(); };
+  grid.appendChild(pvCard);
 
   // --- HV VPI card ---
   const hvBase = HV_VPI[tp];
@@ -1079,6 +1113,8 @@ function updatePostTransplant() {
     vpiInterp.innerHTML = `<span style="color:var(--ok)">Triphasic target (VPI ≥1)</span>`;
   }
   interpDiv.appendChild(vpiInterp);
+  hvCard.classList.add('clickable');
+  hvCard.onclick = () => { currentChart = 'vpi'; renderTrendChart(); };
   grid.appendChild(hvCard);
 
   // --- HA PSV/RI card ---
@@ -1163,7 +1199,7 @@ function buildClinicalNotes(ageGrp, graftType, donorType, tp) {
 // ====================================================
 document.addEventListener('DOMContentLoaded', () => {
   buildTimepointGrid();
-  renderVpiChart();
+  renderTrendChart();
   updatePostTransplant();
 });
 </script>
